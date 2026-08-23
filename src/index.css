@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --color-accent: #ff751f;
+  --color-cream: #f6f3e4;
+  --color-void: #050505;
+  --color-ink: #0a0a0a;
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: dark;
+  scrollbar-width: thin;
+  scrollbar-color: #ff751f #0a0a0a;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff751f 0%, #a34a14 100%);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #f6f3e4;
+}
+
+::-webkit-scrollbar-corner {
+  background: #050505;
+}
+
+body {
+  margin: 0;
+  background: #050505;
+  color: #f6f3e4;
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  -webkit-font-smoothing: antialiased;
+  text-size-adjust: 100%;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+@media (max-width: 1023px) {
+  body {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+::selection {
+  background: #ff751f;
+  color: #050505;
+}
+
+.dither-pattern {
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0px, transparent 1px, #f6f3e4 1px, #f6f3e4 2px),
+    repeating-linear-gradient(90deg, transparent 0px, transparent 1px, #f6f3e4 1px, #f6f3e4 2px);
+  background-size: 3px 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
