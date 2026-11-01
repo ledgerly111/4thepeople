@@ -40,6 +40,45 @@ export function ProductIcon({ name, className = 'h-6 w-6', strokeWidth = '1.5', 
     )
   }
 
+  if (name === 'construction') {
+    return (
+      <svg {...common}>
+        <path d="M5.5 16V14.5a6.5 6.5 0 0 1 13 0V16" />
+        <path d="M10.5 8.25V6.25h3v2" />
+        <path d="M3.75 16h16.5v2.25H3.75Z" />
+      </svg>
+    )
+  }
+
+  if (name === 'phone') {
+    return (
+      <svg {...common}>
+        <path d="M8 3.75h8A1.25 1.25 0 0 1 17.25 5v14A1.25 1.25 0 0 1 16 20.25H8A1.25 1.25 0 0 1 6.75 19V5A1.25 1.25 0 0 1 8 3.75Z" />
+        <path d="M10.75 6.25h2.5M11.25 17.5h1.5" />
+      </svg>
+    )
+  }
+
+  if (name === 'crm') {
+    return (
+      <svg {...common}>
+        <circle cx="9" cy="9.25" r="2.75" />
+        <path d="M4.5 18.5c.6-2.7 2.3-4 4.5-4s3.9 1.3 4.5 4" />
+        <path d="M15.25 8h4.5M15.25 11.5h4.5M16.75 15h3" />
+      </svg>
+    )
+  }
+
+  if (name === 'mcp') {
+    return (
+      <svg {...common}>
+        <path d="M9.25 3.75v4M14.75 3.75v4" />
+        <path d="M6.75 7.75h10.5v3a5.25 5.25 0 0 1-10.5 0Z" />
+        <path d="M12 16v4.25" />
+      </svg>
+    )
+  }
+
   if (name === 'spark') {
     return (
       <svg {...common}>

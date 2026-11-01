@@ -9,6 +9,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP)
 //   data-reveal="fold"  a sheet unfolds down from its top edge
 //   data-reveal="words" each .w word folds up off the line
 //   data-reveal="draw"  an SVG path (pathLength 1, dasharray 1) inks itself in
+//   data-reveal="wipe"  uncovered left to right, for stretched strokes like the underline
 //   data-reveal="pop"   pops in with a squash, like the dot landing
 //   data-reveal="rise"  plain rise and fade
 export function useReveal(scope, dependencies = []) {
@@ -52,6 +53,20 @@ export function useReveal(scope, dependencies = []) {
           ease: 'power2.inOut',
           scrollTrigger: { trigger: el, ...once },
         })
+      })
+
+      q('[data-reveal="wipe"]').forEach((el) => {
+        gsap.fromTo(
+          el,
+          { clipPath: 'inset(-50% 100% -50% -5%)' },
+          {
+            clipPath: 'inset(-50% -5% -50% -5%)',
+            duration: 0.8,
+            delay: Number(el.dataset.delay || 0),
+            ease: 'power2.inOut',
+            scrollTrigger: { trigger: el, ...once },
+          },
+        )
       })
 
       q('[data-reveal="pop"]').forEach((el) => {

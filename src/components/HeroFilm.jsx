@@ -1,11 +1,12 @@
 // The hero, after the "4TP x your AI" origami film: an orange sheet falls, blintz-folds
 // into the 4TP icon and the sidebar wordmark pops onto it. The dot jumps out, flips
-// orange and hops round the four systems, tapping each tile open; it comes home, ink
+// orange and hops round every system, tapping each tile open; it comes home, ink
 // threads join every tile to 4TP and orange beads keep running home along them.
 import { useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PRODUCTS } from '../data/products'
 import { ProductIcon } from './ProductIcons'
+import ByteAurora from './byte/ByteAurora'
 import { applyFold, blintzGeometry, faceLight, foldMatrix, hull, pts } from '../origami/fold'
 import { LOGO_DOT_CENTRE, LOGO_FOUR, LOGO_P_HOLE, LOGO_TP, LOGO_TP_SPLIT } from '../origami/logoPaths'
 import {
@@ -32,32 +33,35 @@ const HIT = {
   squash: 2.12,
   launch: 2.25,
 }
-const IDLE = 6
 
 // ------------------------------------------------------------------ the tiles
-const RING = 350
-const TILE = 168
+// One tile per system, evenly round a ring that starts at the top and runs clockwise.
+const N = PRODUCTS.length
+const RING = N > 6 ? 372 : 350
+const TILE = N > 6 ? 132 : 168
 const BACKS = ['#ff8d42', '#f4c26b', '#ea6411', '#fe7b29']
+const TILTS = [-3, 2.5, -2, 3, -2.5, 2]
 const TILES = PRODUCTS.map((p, i) => {
-  const ang = ((-135 + i * 90) * PI) / 180
+  const ang = ((-90 + (i * 360) / N) * PI) / 180
   return {
-    i, slug: p.slug, icon: p.icon, name: p.short, back: BACKS[i],
-    x: C + RING * Math.cos(ang), y: C + RING * Math.sin(ang), tilt: [-3, 2.5, -2, 3][i],
+    i, slug: p.slug, icon: p.icon, name: p.short, back: BACKS[i % BACKS.length],
+    x: C + RING * Math.cos(ang), y: C + RING * Math.sin(ang), tilt: TILTS[i % TILTS.length],
   }
 })
-const PERCH = { x: 72, y: -72 }
+const PERCH = { x: TILE * 0.43, y: -TILE * 0.43 }
 
 // The dot's hops: out to the first tile, a little rebound onto each tile's corner, on
 // to the next tile, then home.
 const HOPS = []
 {
   const firstLand = 2.63
+  const gap = N > 6 ? 0.42 : 0.52
   HOPS.push({ kind: 'out', to: 0, t0: HIT.launch, t1: firstLand })
   let land = firstLand
   TILES.forEach((a, i) => {
     if (i > 0) {
-      const t0 = 3.15 + (i - 1) * 0.52
-      land = t0 + 0.32
+      const t0 = 3.05 + (i - 1) * gap
+      land = t0 + gap * 0.6
       HOPS.push({ kind: 'tile', from: i - 1, to: i, t0, t1: land })
     }
     a.land = land
@@ -69,12 +73,13 @@ const HOPS = []
   HIT.data = HIT.home + 0.3
   HIT.shimmer = HIT.home + 0.52
 }
+const IDLE = HIT.home + 0.9
 
 const mod = (a, n) => ((a % n) + n) % n
-const BEAD_EVERY = 2.8
+const BEAD_EVERY = 3.6
 const BEAD_TRIP = 0.9
 const beadPhase = (t, i) => {
-  const since = t - IDLE - i * 0.7
+  const since = t - IDLE - (i * BEAD_EVERY) / N
   return since < 0 ? -1 : mod(since, BEAD_EVERY)
 }
 
@@ -353,11 +358,17 @@ function Tile({ a, t, hover, focus, onOpen, onHover, onFocus }) {
   const TR = [[qx, y0], [x1, y0], [x1, qy], [qx, qy]]
   const BL = [[x0, qy], [qx, qy], [qx, y1], [x0, y1]]
   const BR = [[qx, qy], [x1, qy], [x1, y1], [qx, y1]]
-  const IS = 96
+  const IS = TILE * 0.57
   const front = (
     <>
       <rect x={x0} y={y0} width={TILE} height={TILE} fill="#fffaf0" />
-      <ProductIcon name={a.icon} x={qx - IS / 2} y={qy - IS / 2} width={IS} height={IS} className="" stroke={INK} strokeWidth="1.25" />
+      {a.icon === 'byte' ? (
+        <g transform={`translate(${qx - IS / 2} ${qy - IS / 2}) scale(${IS / 64})`}>
+          <ByteAurora size={64} title="BYTE AI" />
+        </g>
+      ) : (
+        <ProductIcon name={a.icon} x={qx - IS / 2} y={qy - IS / 2} width={IS} height={IS} className="" stroke={INK} strokeWidth="1.25" />
+      )}
     </>
   )
   const back = <rect x={x0} y={y0} width={TILE} height={TILE} fill={a.back} />
@@ -372,6 +383,7 @@ function Tile({ a, t, hover, focus, onOpen, onHover, onFocus }) {
   const lifted = hover || focus
   const lift = lifted ? 1.07 : 1
   const shadowOff = lifted ? [15, 18] : [9, 11]
+  const above = qy < C - 60
   const bottom = cb >= 0 ? (
     <>
       <Flap id={`hf-bl${a.i}`} poly={BL} top={front} a={0} edges={edgesOf(BL, [0, 0, 1, 1])} />
@@ -393,7 +405,7 @@ function Tile({ a, t, hover, focus, onOpen, onHover, onFocus }) {
         <Shade points={pts([[x0, qy], [x1, qy], [x1, y1], [x0, y1]])} light={faceLight([0, 1], s.beta)} />
       </g>
       {s.label > 0 ? (
-        <text x={qx} y={(qy < C ? y0 - 24 : y1 + 42) + 10 * (1 - s.label)} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={650} fontSize={30} letterSpacing="-0.5" fill={INK} opacity={s.label}>
+        <text x={qx} y={(above ? y0 - 20 : y1 + 40) + 10 * (1 - s.label)} textAnchor="middle" fontFamily="Inter, sans-serif" fontWeight={650} fontSize={N > 6 ? 32 : 30} letterSpacing="-0.5" fill={INK} opacity={s.label}>
           {a.name}
           {lifted ? <tspan fill={ORANGE}> →</tspan> : null}
         </text>
@@ -403,7 +415,7 @@ function Tile({ a, t, hover, focus, onOpen, onHover, onFocus }) {
       ) : null}
       {s.open ? (
         <rect
-          x={x0 - 12} y={qy < C ? y0 - 62 : y0 - 12} width={TILE + 24} height={TILE + 74} fill="transparent"
+          x={x0 - 12} y={above ? y0 - 58 : y0 - 12} width={TILE + 24} height={TILE + 70} fill="transparent"
           role="link" tabIndex={0} aria-label={`Open ${a.name}`} style={{ cursor: 'pointer', outline: 'none' }}
           onClick={onOpen}
           onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen() } }}
@@ -422,7 +434,7 @@ function spokeGeom(a, bob) {
   const m = Math.hypot(dx, dy)
   const u = [dx / m, dy / m]
   const S = [C + u[0] * 128, C + u[1] * 128]
-  const E = [a.x - u[0] * 112, a.y - u[1] * 112 + bob]
+  const E = [a.x - u[0] * TILE * 0.67, a.y - u[1] * TILE * 0.67 + bob]
   const bend = a.i % 2 ? 18 : -18
   const M = [(S[0] + E[0]) / 2 - u[1] * bend, (S[1] + E[1]) / 2 + u[0] * bend]
   return { S, E, M }
@@ -451,7 +463,7 @@ function Spokes({ t }) {
   })
 }
 
-const SPARKS = [[0, -250, 0], [250, 0, 1], [0, 250, 2], [-250, 0, 3]]
+const SPARKS = [[170, -170, 0], [175, 165, 1], [-170, 170, 2], [-175, -160, 3]]
 
 export default function HeroFilm({ className = '' }) {
   const root = useRef(null)
@@ -472,7 +484,7 @@ export default function HeroFilm({ className = '' }) {
   return (
     <div ref={root} className={`relative ${className}`}>
       <div className="ink-boil">
-        <svg viewBox="40 110 1000 880" className="block h-auto w-full overflow-hidden" role="group" aria-label="4TP and its four systems">
+        <svg viewBox={N > 6 ? '0 30 1080 1010' : '40 110 1000 880'} className="block h-auto w-full overflow-hidden" role="group" aria-label={`4TP and its ${N} systems`}>
           {t > 0 ? (
             <>
               <Trail t={t} />
@@ -492,7 +504,7 @@ export default function HeroFilm({ className = '' }) {
                   onFocus={(on) => setFocus(on ? a.i : -1)}
                 />
               ))}
-              {TILES.map((a) => <Impact key={a.i} x={a.x} y={a.y} t={t} at={a.land + 0.02} r0={100} len={20} count={10} life={0.28} width={2.6} skew={a.i} />)}
+              {TILES.map((a) => <Impact key={a.i} x={a.x} y={a.y} t={t} at={a.land + 0.02} r0={TILE * 0.6} len={20} count={10} life={0.28} width={2.6} skew={a.i} />)}
               <Impact x={home[0]} y={home[1]} t={t} at={HIT.home} r0={24} len={14} count={8} life={0.26} width={2.4} />
               {SPARKS.map(([x, y, j]) => {
                 let k = prog(t, HIT.shimmer + j * 0.07, HIT.shimmer + j * 0.07 + 0.42)

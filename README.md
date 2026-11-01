@@ -21,6 +21,7 @@ Live: https://ledgerly111.github.io/4thepeople/
 - `src/origami/` — the paper kit: fold geometry, ink filters (`InkDefs`, `useBoil`),
   the logo, scroll reveals (`useReveal`).
 - `src/components/HeroFilm.jsx` — the hero: the sheet folds into the 4TP icon and the dot
-  hops round the four systems.
+  hops round every system.
 - `src/components/FoldingSheet.jsx` — the looping fold on the custom-software sections.
-- `src/data/products.js` — all copy for the four system pages.
+- `src/data/products.js` — all copy for the system pages (desks, CRM, MCP server, BYTE AI).
+- `src/components/byte/ByteAurora.jsx` — BYTE AI's icon, as drawn in ledgerly-react.

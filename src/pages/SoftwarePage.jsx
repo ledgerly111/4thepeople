@@ -6,9 +6,8 @@ import PipeRibbon from '../components/PipeRibbon'
 import StepTrail from '../components/StepTrail'
 import CtaSheet from '../components/CtaSheet'
 import PaperScraps from '../components/PaperScraps'
-import { ProductIcon } from '../components/ProductIcons'
+import SystemBadge from '../components/SystemBadge'
 import { DropTitle, FoldWords } from '../components/Ink'
-import OrigamiBadge from '../origami/OrigamiBadge'
 import { useReveal } from '../origami/useReveal'
 import { sentenceCase, titleCase } from '../lib/text'
 
@@ -56,10 +55,8 @@ export default function SoftwarePage({ product }) {
               </div>
             </div>
             <div className="relative mx-auto w-52 sm:w-64 lg:w-full lg:max-w-[22rem]" data-reveal="pop">
-              <OrigamiBadge className="float-y ink-boil h-auto w-full">
-                <ProductIcon name={product.icon} x="58" y="58" width="84" height="84" className="" stroke="var(--color-sheet)" strokeWidth="1.5" />
-              </OrigamiBadge>
-              <span className="hand-note absolute -bottom-2 right-0 rotate-3 text-xl text-ink-soft lg:text-2xl">{product.status.toLowerCase()} today ✓</span>
+              <SystemBadge icon={product.icon} className={`float-y aspect-square h-auto w-full ${product.icon === 'byte' ? '' : 'ink-boil'}`} />
+              <span className="hand-note absolute -bottom-2 right-0 rotate-3 text-xl text-ink-soft lg:text-2xl">{product.status === 'LIVE' ? 'live today ✓' : `${product.status.toLowerCase()} ✓`}</span>
             </div>
           </div>
         </section>

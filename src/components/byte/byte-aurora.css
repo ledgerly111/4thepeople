@@ -1,0 +1,66 @@
+/* BYTE's Aurora orb (ByteAurora.jsx). Each state is its own animation; static has none. */
+.byte-aurora { display: block; flex-shrink: 0; overflow: visible; }
+.byte-aurora__body,
+.byte-aurora__swirl,
+.byte-aurora__rings circle { transform-origin: 32px 32px; }
+.byte-aurora__eyes,
+.byte-aurora__dots circle { transform-box: fill-box; transform-origin: center; }
+.byte-aurora__band,
+.byte-aurora__dots,
+.byte-aurora__rings circle { opacity: 0; }
+
+/* Idle: floats, breathes, blinks and now and then glances around. */
+.byte-aurora.is-idle .byte-aurora__body { animation: byte-float 3.6s ease-in-out infinite; }
+.byte-aurora.is-idle .byte-aurora__swirl { animation: byte-breathe 3.6s ease-in-out infinite; }
+.byte-aurora.is-idle .byte-aurora__eyes { animation: byte-idle-eyes 7.2s ease-in-out infinite; }
+@keyframes byte-float { 50% { transform: translateY(-3px); } }
+@keyframes byte-breathe { 50% { transform: scale(1.12); opacity: 0.85; } }
+@keyframes byte-idle-eyes {
+  0%, 18%, 100% { transform: translate(0, 0) scaleY(1); }
+  21% { transform: translate(0, 0) scaleY(0.1); }
+  24%, 46% { transform: translate(0, 0) scaleY(1); }
+  52%, 62% { transform: translate(-3.5px, 0) scaleY(1); }
+  70%, 80% { transform: translate(3.5px, -1px) scaleY(1); }
+  86% { transform: translate(0, 0) scaleY(1); }
+}
+
+/* Thinking: the light spins while BYTE looks up and to the side, then blinks. */
+.byte-aurora.is-thinking .byte-aurora__swirl { animation: byte-spin 3.2s linear infinite; }
+.byte-aurora.is-thinking .byte-aurora__eyes { animation: byte-ponder 4s ease-in-out infinite; }
+@keyframes byte-spin { to { transform: rotate(360deg); } }
+@keyframes byte-ponder {
+  0%, 100% { transform: translate(0, 0) scaleY(1); }
+  20%, 62% { transform: translate(3px, -3px) scaleY(1); }
+  68% { transform: translate(3px, -3px) scaleY(0.12); }
+  74% { transform: translate(3px, -3px) scaleY(1); }
+}
+
+/* Scanning (using tools): a band of light sweeps across while the eyes read left and right. */
+.byte-aurora.is-scanning .byte-aurora__band { opacity: 1; animation: byte-band 1.6s ease-in-out infinite; }
+.byte-aurora.is-scanning .byte-aurora__eyes { animation: byte-read 1.6s ease-in-out infinite; }
+.byte-aurora.is-scanning .byte-aurora__swirl { animation: byte-spin 6s linear infinite; }
+@keyframes byte-band { from { transform: translateX(0); } to { transform: translateX(110px); } }
+@keyframes byte-read { 0%, 100% { transform: translateX(-3px); } 50% { transform: translateX(3px); } }
+
+/* Typing: three dots bounce under its eyes while the answer appears. */
+.byte-aurora.is-typing .byte-aurora__eyes { transform: translateY(-2px); }
+.byte-aurora.is-typing .byte-aurora__dots { opacity: 1; }
+.byte-aurora.is-typing .byte-aurora__dots circle { animation: byte-dot 0.9s ease-in-out infinite; }
+.byte-aurora.is-typing .byte-aurora__dots circle:nth-child(2) { animation-delay: 0.15s; }
+.byte-aurora.is-typing .byte-aurora__dots circle:nth-child(3) { animation-delay: 0.3s; }
+.byte-aurora.is-typing .byte-aurora__swirl { animation: byte-spin 8s linear infinite; }
+@keyframes byte-dot { 0%, 60%, 100% { transform: translateY(0); } 30% { transform: translateY(-2.6px); } }
+
+/* Done: rings pulse out once and the eyes smile. */
+.byte-aurora.is-done .byte-aurora__rings circle { animation: byte-ring 1.4s ease-out 1 both; }
+.byte-aurora.is-done .byte-aurora__rings circle:nth-child(2) { animation-delay: 0.18s; }
+.byte-aurora.is-done .byte-aurora__rings circle:nth-child(3) { animation-delay: 0.36s; }
+.byte-aurora.is-done .byte-aurora__body { animation: byte-throb 0.9s ease-in-out 1; }
+.byte-aurora.is-done .byte-aurora__eyes { animation: byte-smile 1.4s ease-in-out 1; }
+@keyframes byte-ring { 0% { transform: scale(1); opacity: 0.75; } 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes byte-throb { 0%, 100% { transform: scale(1); } 30% { transform: scale(1.06); } }
+@keyframes byte-smile { 0%, 100% { transform: scaleY(1); } 25%, 70% { transform: scaleY(0.45); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .byte-aurora * { animation: none !important; }
+}

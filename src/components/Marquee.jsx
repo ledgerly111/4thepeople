@@ -1,7 +1,7 @@
-const WORDS = ['Typing centers', 'Cafeterias & restaurants', 'Retail counters', 'Van sales routes', 'Custom builds', 'Made in Dubai']
+const WORDS = ['Typing centers', 'Cafeterias & restaurants', 'Retail counters', 'Van sales routes', 'Construction', 'Mobile shops', 'CRM', 'BYTE AI', 'MCP server', 'Custom builds', 'Made in Dubai']
 
 function Ribbon({ reverse = false, tone }) {
-  const items = [...WORDS, ...WORDS]
+  const items = WORDS
   return (
     <div className={`sheet ${tone} overflow-hidden py-3 lg:py-4`} style={{ '--shadow': '6px 8px' }}>
       <div className={`marquee-track ${reverse ? 'marquee-track--rev' : ''}`}>

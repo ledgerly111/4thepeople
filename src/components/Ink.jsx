@@ -3,17 +3,20 @@ import gsap from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { reducedMotion } from '../origami/motion'
 
-// A hand-inked orange underline. With data-reveal="draw" (the default) it inks itself
-// in when it scrolls into view.
+// A hand-inked orange underline. With data-reveal="wipe" (the default) it inks itself in,
+// left to right, when it scrolls into view. (A pathLength dash would stop short here: a
+// non-scaling stroke measures its dashes on screen, and the underline stretches.)
 export function Squiggle({ className = '', reveal = true, delay = 0, color = 'var(--color-orange)', width = 9 }) {
   return (
-    <svg viewBox="0 0 300 40" preserveAspectRatio="none" className={`pointer-events-none overflow-visible ${className}`} aria-hidden="true">
+    <svg
+      viewBox="0 0 300 40" preserveAspectRatio="none"
+      className={`pointer-events-none overflow-visible ${className}`} aria-hidden="true"
+      data-reveal={reveal ? 'wipe' : undefined} data-delay={delay}
+    >
       <path
         d="M 4 22 C 60 10, 120 30, 180 16 S 270 12, 296 20"
         fill="none" stroke={color} strokeWidth={width} strokeLinecap="round"
-        pathLength="1" strokeDasharray="1 1" strokeDashoffset="0"
         vectorEffect="non-scaling-stroke"
-        data-reveal={reveal ? 'draw' : undefined} data-delay={delay}
       />
     </svg>
   )
@@ -73,7 +76,7 @@ export function DropTitle({ lines, accent, as: Tag = 'h1', className = '', delay
         tl.add(() => ref.current?.querySelector('.impact')?.classList.add('is-on'))
         tl.fromTo('.drop-dot', { scaleX: 1.3, scaleY: 0.65 }, { scaleX: 1, scaleY: 1, duration: 0.5, ease: 'elastic.out(1.2, 0.4)' }, '<')
       }
-      tl.from('.squiggle-under path', { strokeDashoffset: 1, duration: 0.5, ease: 'power2.out' }, '<0.05')
+      tl.fromTo('.squiggle-under', { clipPath: 'inset(-50% 100% -50% -5%)' }, { clipPath: 'inset(-50% -5% -50% -5%)', duration: 0.5, ease: 'power2.out' }, '<0.05')
     },
     { scope: ref },
   )
