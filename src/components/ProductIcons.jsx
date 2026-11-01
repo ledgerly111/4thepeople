@@ -1,11 +1,14 @@
-export function ProductIcon({ name, className = 'h-6 w-6' }) {
+export function ProductIcon({ name, className = 'h-6 w-6', strokeWidth = '1.5', ...rest }) {
   const common = {
     className,
     fill: 'none',
     stroke: 'currentColor',
-    strokeWidth: '1.5',
+    strokeWidth,
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
     viewBox: '0 0 24 24',
     'aria-hidden': true,
+    ...rest,
   }
 
   if (name === 'document') {
@@ -33,6 +36,14 @@ export function ProductIcon({ name, className = 'h-6 w-6' }) {
         <path d="M4.75 10.25 6 5.75h12l1.25 4.5v8.5H4.75Z" />
         <path d="M4.75 10.25h14.5" />
         <path d="M9.25 18.75v-5h5.5v5" />
+      </svg>
+    )
+  }
+
+  if (name === 'spark') {
+    return (
+      <svg {...common}>
+        <path d="M12 3.75v4M12 16.25v4M3.75 12h4M16.25 12h4M6.2 6.2l2.6 2.6M15.2 15.2l2.6 2.6M6.2 17.8l2.6-2.6M15.2 8.8l2.6-2.6" />
       </svg>
     )
   }

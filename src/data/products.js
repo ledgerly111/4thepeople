@@ -4,6 +4,8 @@ export const PRODUCTS = [
     id: '01',
     icon: 'document',
     name: 'TYPING CENTER ERP',
+    label: 'Typing Center ERP',
+    short: 'Typing centers',
     status: 'LIVE',
     stackCopy:
       'Work orders, government-fee wallets, invoicing, staff control. Purpose-built for UAE typing centers.',
@@ -106,6 +108,8 @@ export const PRODUCTS = [
     id: '02',
     icon: 'utensils',
     name: 'CAFETERIA & RESTAURANT',
+    label: 'Cafeteria & Restaurant',
+    short: 'Restaurants',
     status: 'LIVE',
     stackCopy:
       'Floor, food POS, kitchen display, recipes, delivery, and cash shifts — one service line from guest to ledger.',
@@ -200,6 +204,8 @@ export const PRODUCTS = [
     id: '03',
     icon: 'store',
     name: 'RETAIL POS',
+    label: 'Retail POS',
+    short: 'Retail',
     status: 'LIVE',
     stackCopy:
       'Barcode counter, warehouse stock, customers, purchasing, and end-of-day close. Built for UAE retail shops.',
@@ -296,6 +302,8 @@ export const PRODUCTS = [
     id: '04',
     icon: 'truck',
     name: 'VAN SALES',
+    label: 'Van Sales',
+    short: 'Van sales',
     status: 'LIVE',
     stackCopy:
       'Load the van, run the route, sell and collect, unload and confirm. Field sales with warehouse truth.',

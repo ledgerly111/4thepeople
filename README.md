@@ -1,16 +1,26 @@
-# React + Vite
+# 4TP website
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+The marketing site for 4TP (4 The People): automated software for typing centers,
+restaurants, retail and van sales in the UAE.
 
-Currently, two official plugins are available:
+The look follows the 4TP origami film (`4tp-video/src/origami`): cream sketchbook paper,
+ink outlines that "boil", orange folded paper. The logo is the 4TP wordmark from the
+Ledgerly sidebar, traced to paths in `src/origami/logoPaths.js`.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```bash
+npm install
+npm run dev      # local dev server
+npm run build    # production build into dist/
+npm run deploy   # build for GitHub Pages and push it to the gh-pages branch
+```
 
-## React Compiler
+Live: https://ledgerly111.github.io/4thepeople/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Where things are
 
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- `src/origami/` — the paper kit: fold geometry, ink filters (`InkDefs`, `useBoil`),
+  the logo, scroll reveals (`useReveal`).
+- `src/components/HeroFilm.jsx` — the hero: the sheet folds into the 4TP icon and the dot
+  hops round the four systems.
+- `src/components/FoldingSheet.jsx` — the looping fold on the custom-software sections.
+- `src/data/products.js` — all copy for the four system pages.
